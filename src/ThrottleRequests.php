@@ -96,7 +96,13 @@ abstract class ThrottleRequests
         throw new \Exception($msg, StatusCode::TOO_MANY_ATTEMPT);
     }
     */
-    abstract protected function buildResponse($key, $maxAttempts);
+     protected function buildResponse($key, $maxAttempts) {
+         $retryAfter = $this->limiter->availableIn($key);
+
+         $msg = _('接口调用次数过多，请稍后重试：') . $retryAfter . 's';
+
+         throw new \Exception($msg, StatusCode::TOO_MANY_ATTEMPT);
+     }
 
 
 
